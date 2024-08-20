@@ -1,7 +1,8 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function Header({ children }: Props) {
+  const currentPath = usePathname();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { data, status } = useSession();
   useEffect(() => {
@@ -18,26 +20,44 @@ export default function Header({ children }: Props) {
       setIsAuthenticated(false);
     }
   }, [status, data]);
-  return (
-    <main>
-      <header>
-        <nav>
-          <div>
-            <Image src={".akil-logo.png"} alt="Logo" />
-          </div>
-          <div>
-            {/* navigation link  in next js */}
 
+  console.log(data, status, "data and status in header");
+  return (
+    <main className="no-scrollbar">
+      <header>
+        <nav className="bg-neutral-100 flex flex-col gap-y-6 sm:flex-row  justify-between items-center sm:min-h-20 my-auto px-4 scroll-smooth ">
+          <div>
+            <Image src={"/akil-logo.png"} alt="Logo" width={70} height={30} />
+          </div>
+          <div className="flex flex-col sm:flex-row gap-x-7">
             <Link href="/">
-              <div>
-                <Image src={"./icons/home.svg"} alt="Home" />
+              <div
+                className={`flex flex-col items-center justify-center gap-3 px-2  ${
+                  currentPath === "/" ? "border-b-2  border-black" : ""
+                } `}
+              >
+                <Image
+                  src={"/icons/home.svg"}
+                  alt="Home"
+                  width={24}
+                  height={24}
+                />
                 <p>Home</p>
               </div>
             </Link>
             {isAuthenticated && (
               <Link href="/markedJobs">
-                <div>
-                  <Image src={"./icons/home.svg"} alt="Home" />
+                <div
+                  className={`flex flex-col items-center justify-center gap-3 px-2  ${
+                    currentPath === "/markedJobs" ? "border-b-2  border-black" : ""
+                  }`}
+                >
+                  <Image
+                    src={"/icons/home.svg"}
+                    alt="Home"
+                    width={24}
+                    height={24}
+                  />
                   <p>My Jobs</p>
                 </div>
               </Link>
@@ -45,19 +65,35 @@ export default function Header({ children }: Props) {
           </div>
           <div>
             {isAuthenticated ? (
-              <div>
-                <button>Log Out</button>
-                <div>
-                  <Image src="./user.png" alt="Profile" />
+              <div className="flex flex-col sm:flex-row gap-x-5 items-center justify-center">
+                <button
+                  className="py-4 px-8 rounded-lg bg-[#4640DE] text-white h-fit"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    await signOut();
+                  }}
+                >
+                  Log Out
+                </button>
+                <div className="flex flex-col justify-center items-center gap-y-1">
+                  <Image src="/user.png" alt="Profile" width={48} height={48} />
                   <p>{data?.user?.name}</p>
                 </div>
               </div>
             ) : (
-              <div>
-                <button className="py-4 px-8 rounded-lg bg-[#4640DE]">
+              <div className="flex flex-col sm:flex-row gap-x-5 ">
+                <Link
+                  href={"/auth/login"}
+                  className="py-4 px-8 text-[#4640DE] rounded-lg  border-2 "
+                >
                   Log In
-                </button>
-                <button className="py-4 px-8 rounded-lg bg-[#4640DE]">Sign Up</button>
+                </Link>
+                <Link
+                  href={"/auth"}
+                  className="py-4 px-8 rounded-lg bg-[#4640DE] text-white"
+                >
+                  Sign Up
+                </Link>
               </div>
             )}
           </div>

@@ -11,44 +11,19 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const Google = GoogleProvider({
   clientId: GOOGLE_CLIENT_ID as string,
   clientSecret: GOOGLE_CLIENT_SECRET as string,
-});
 
-/* 
-const Google = GoogleProvider({
-  profile(profile) {
-    let userRole = "user";
-    try {
-      return {
-        ...profile,
-        id: profile.sub,
-        role: userRole,
-      };
-    } catch (error) {
-      return {
-        id: "",
-        role: userRole,
-        aud: "",
-        azp: "",
-        email: "",
-        email_verified: false,
-        exp: 0,
-        family_name: "",
-        given_name: "",
-        hd: "",
-        iat: 0,
-        iss: "",
-        jti: "",
-        name: "",
-        nbf: 0,
-        picture: "",
-        sub: "",
-      } as User;
-    }
+  profile(profile, tokens) {
+    return {
+      id: profile.sub,
+      name: profile.name,
+      email: profile.email,
+      accessToken: tokens.access_token,
+      image: profile.picture,
+      verified: true,
+      role: "user",
+    };
   },
-  clientId: GOOGLE_ID,
-  clientSecret: GOOGLE_SECRET,
 });
- */
 const AkilLogin = CredentialsProvider({
   id: "akil-login",
   name: "Akil Login",

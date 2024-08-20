@@ -53,3 +53,22 @@ export interface singleDataComing {
   error?: string;
   data: Job;
 }
+
+export interface BookMarkComing {
+  success: boolean;
+  message: string;
+  data: bookMarkData[] | null;
+  errors: string | null;
+  count: number;
+}
+
+export interface bookMarkData {
+  eventID: string;
+  title: string;
+  opType: string;
+  orgName: string;
+  datePosted: Date;
+  dateBookmarked: Date;
+  logoUrl: string;
+  location: string;
+}

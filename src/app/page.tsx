@@ -33,7 +33,6 @@ export default function Home() {
           </form>
         </div>
       </div>
-
       <div>
         {load.loading ? (
           <p className="text-center">Looding....</p>
@@ -45,7 +44,7 @@ export default function Home() {
           <div className="gap-y-8 flex flex-col">
             {load.jobs.map((value, ind) => {
               return (
-                <Link key={ind} href={`${value.id}`}>
+                <Link key={ind} href={`jobdetail/${value.id}`}>
                   <JobCard
                     categories={value.categories}
                     company={value.orgName}

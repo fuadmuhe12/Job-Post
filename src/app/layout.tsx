@@ -4,6 +4,7 @@ import { Epilogue } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "./storeProvider";
 import SessionProvider from "@/components/SessionProvider";
+import Header from "@/components/Header";
 const inter = Inter({ subsets: ["latin"] });
 const epilogue = Epilogue({ subsets: ["latin"] });
 
@@ -22,7 +23,9 @@ export default function RootLayout({
       <body className={epilogue.className}>
         <div>
           <StoreProvider>
-            <SessionProvider>{children}</SessionProvider>
+            <SessionProvider>
+              <Header>{children}</Header>
+            </SessionProvider>
           </StoreProvider>
         </div>
       </body>
