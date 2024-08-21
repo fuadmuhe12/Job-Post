@@ -13,8 +13,10 @@ import {
 import { useSession } from "next-auth/react";
 import BookedJobCard from "@/components/BookedJobCard";
 import Spinner from "@/components/spinner";
+import { redirect } from "next/navigation";
 
 export default function MyJobs() {
+  const { data, status } = useSession();
   const [
     addBookMark,
     {
@@ -28,15 +30,18 @@ export default function MyJobs() {
     removeBookMark,
     { isLoading: isRemoveLoading, originalArgs: remMarkOrigArgs },
   ] = useRemoveBookMarkMutation();
-  const { data, status } = useSession();
-  const { data: bookMarkData, isLoading:isbookMarkLoading,isError:isBookMarkError } = useGetBookMarksQuery(
-    data?.user?.accessToken || ""
-  );
+  const { data: SessionData, status: SessionStatus } = useSession();
+  const {
+    data: bookMarkData,
+    isLoading: isbookMarkLoading,
+    isError: isBookMarkError,
+  } = useGetBookMarksQuery(data?.user?.accessToken || "");
   function Addbookfunc(id: string, TOKEN: string) {
     addBookMark({ id, TOKEN }).unwrap();
   }
-  console.log(bookMarkData);
-  
+  if (SessionStatus === "unauthenticated" || !SessionData?.user?.verified) {
+    redirect("/auth/login");
+  }
 
   return (
     <main className="px-5 pb-7">
@@ -51,7 +56,7 @@ export default function MyJobs() {
         </div>
       </div>
       <div>
-        {(isRemoveLoading|| isbookMarkLoading)&& <Spinner/>}
+        {(isRemoveLoading || isbookMarkLoading) && <Spinner />}
         {isBookMarkError ? (
           <p className="text-center">
             Error <span className="text-red-400 ">{bookMarkData?.errors}</span>

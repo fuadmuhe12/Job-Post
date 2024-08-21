@@ -29,7 +29,7 @@ export default function JobDetailPage({ params }: props) {
       ) : JobDetailData?.data ? (
         <JobDetail {...JobDetailData?.data} />
       ) : (
-        <p>DetailPage</p>
+        <p></p>
       )}
     </div>
   );

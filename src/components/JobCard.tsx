@@ -10,6 +10,8 @@ import { link } from "fs/promises";
 import Image from "next/image";
 import { List } from "postcss/lib/list";
 import Spinner from "./spinner";
+import { redirect } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 type Props = {
   imgUrl: string;
@@ -23,6 +25,7 @@ type Props = {
   removeBookMark: () => void;
   addBookMark: () => void;
   isLoadingJobMark: boolean;
+  isVerifiedUser: boolean;
 };
 
 const JobCard = (props: Props) => {
@@ -51,6 +54,9 @@ const JobCard = (props: Props) => {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  if (!props.isVerifiedUser){
+                    signIn()
+                  }
                   props.isBookmarked
                     ? props.removeBookMark()
                     : props.addBookMark();

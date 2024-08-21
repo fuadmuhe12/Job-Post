@@ -33,7 +33,7 @@ export default function Header({ children }: Props) {
             <Link href="/">
               <div
                 className={`flex flex-col items-center justify-center gap-3 px-2  ${
-                  currentPath === "/" ? "border-b-2  border-black" : ""
+                  currentPath === "/" ? "border-b-2  border-[#4640DE]" : ""
                 } `}
               >
                 <Image
@@ -45,23 +45,24 @@ export default function Header({ children }: Props) {
                 <p>Home</p>
               </div>
             </Link>
-            {isAuthenticated && (
-              <Link href="/markedJobs">
-                <div
-                  className={`flex flex-col items-center justify-center gap-3 px-2  ${
-                    currentPath === "/markedJobs" ? "border-b-2  border-black" : ""
-                  }`}
-                >
-                  <Image
-                    src={"/icons/home.svg"}
-                    alt="Home"
-                    width={24}
-                    height={24}
-                  />
-                  <p>My Jobs</p>
-                </div>
-              </Link>
-            )}
+
+            <Link href="/markedJobs">
+              <div
+                className={`flex flex-col items-center justify-center gap-3 px-2  ${
+                  currentPath === "/markedJobs"
+                    ? "border-b-2  border-[#4640DE]"
+                    : ""
+                }`}
+              >
+                <Image
+                  src={"/icons/home.svg"}
+                  alt="Home"
+                  width={24}
+                  height={24}
+                />
+                <p>My Jobs</p>
+              </div>
+            </Link>
           </div>
           <div>
             {isAuthenticated ? (

@@ -27,13 +27,15 @@ export default function Home() {
     removeBookMark,
     { isLoading: isRemoveLoading, originalArgs: remMarkOrigArgs },
   ] = useRemoveBookMarkMutation();
-  const { data, status } = useSession();
+  const { data: SessionData, status } = useSession();
   const { data: bookMarkData, isLoading: isBookMarkLoading } =
-    useGetBookMarksQuery(data?.user?.accessToken || "");
+    useGetBookMarksQuery(SessionData?.user?.accessToken || "");
   function Addbookfunc(id: string, TOKEN: string) {
     addBookMark({ id, TOKEN }).unwrap();
   }
-  console.log(bookMarkData);
+
+  const isVerified = SessionData?.user?.verified || status === "authenticated";
+
   const {
     data: jobsData,
     isLoading: jobsIsLoading,
@@ -80,6 +82,7 @@ export default function Home() {
               return (
                 <Link key={ind} href={`jobdetail/${value.id}`}>
                   <JobCard
+                    isVerifiedUser={isVerified}
                     isLoadingJobMark={false}
                     categories={value.categories}
                     company={value.orgName}
@@ -94,12 +97,15 @@ export default function Home() {
                     }
                     onType={value.opType}
                     addBookMark={() => {
-                      Addbookfunc(value.id, data?.user?.accessToken || "");
+                      Addbookfunc(
+                        value.id,
+                        SessionData?.user?.accessToken || ""
+                      );
                     }}
                     removeBookMark={() => {
                       removeBookMark({
                         id: value.id,
-                        TOKEN: data?.user?.accessToken || "",
+                        TOKEN: SessionData?.user?.accessToken || "",
                       }).unwrap();
                     }}
                   />
