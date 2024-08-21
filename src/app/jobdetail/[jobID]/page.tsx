@@ -1,5 +1,7 @@
 "use client";
 import JobDetail from "@/components/jobDetail";
+import Spinner from "@/components/spinner";
+import { useGetJobByIdQuery } from "@/lib/features/api/apiSlice";
 import { fetchJobById } from "@/lib/features/getJobs/jobSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { notFound } from "next/navigation";
@@ -11,21 +13,21 @@ interface props {
 export default function JobDetailPage({ params }: props) {
   const dispacher = useAppDispatch();
   const detailLoad = useAppSelector((state) => state.jobs);
-  useEffect(() => {
-    dispacher(fetchJobById(params.jobID));
-    console.log("by id clalled", params.jobID)
-  },[]);
-console.log('rudding detail')
+  const {
+    isError: jobDetailISError,
+    data: JobDetailData,
+    isLoading: jobDetailIsLoading,
+  } = useGetJobByIdQuery(params.jobID);
+
   return (
     <div>
-      {detailLoad.loading ? (
-        <h1>Loading...</h1>
-      ) : detailLoad.error ? (
+      {jobDetailIsLoading && <Spinner />}
+      {jobDetailISError ? (
         <p>
           Error : <span>{detailLoad.error}</span>
         </p>
-      ) : detailLoad.curJob ? (
-        <JobDetail {...detailLoad.curJob} />
+      ) : JobDetailData?.data ? (
+        <JobDetail {...JobDetailData?.data} />
       ) : (
         <p>DetailPage</p>
       )}

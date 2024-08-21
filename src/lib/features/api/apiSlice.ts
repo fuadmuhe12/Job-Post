@@ -1,4 +1,8 @@
-import { BookMarkComing } from "@/lib/types/types";
+import {
+  BookMarkComing,
+  dataComing,
+  singleDataComing,
+} from "@/lib/types/types";
 import {
   createApi,
   fakeBaseQuery,
@@ -12,6 +16,7 @@ interface addBookMarkRequest {
 
 export const apiSlice = createApi({
   reducerPath: "apiBase",
+  tagTypes: ["BookMark"],
   baseQuery: fetchBaseQuery({
     baseUrl: "https://akil-backend.onrender.com/",
   }),
@@ -20,11 +25,13 @@ export const apiSlice = createApi({
     addBookMark: builder.mutation<BookMarkComing, addBookMarkRequest>({
       query: ({ id, TOKEN }) => ({
         url: `bookmarks/${id}`,
+
         method: "POST",
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
       }),
+      invalidatesTags: ["BookMark"],
     }),
     removeBookMark: builder.mutation<BookMarkComing, addBookMarkRequest>({
       query: ({ id, TOKEN }) => ({
@@ -34,6 +41,7 @@ export const apiSlice = createApi({
           Authorization: `Bearer ${TOKEN}`,
         },
       }),
+      invalidatesTags: ["BookMark"],
     }),
     getBookMarks: builder.query<BookMarkComing, string>({
       query: (TOKEN) => ({
@@ -43,6 +51,17 @@ export const apiSlice = createApi({
           Authorization: `Bearer ${TOKEN}`,
         },
       }),
+      providesTags: ["BookMark"],
+    }),
+    getAllJobs: builder.query<dataComing, void>({
+      query: () => ({
+        url: "opportunities/search",
+      }),
+    }),
+    getJobById: builder.query<singleDataComing, string>({
+      query: (id) => ({
+        url: `opportunities/${id}`,
+      }),
     }),
   }),
 });
@@ -51,4 +70,6 @@ export const {
   useAddBookMarkMutation,
   useRemoveBookMarkMutation,
   useGetBookMarksQuery,
+  useGetAllJobsQuery, 
+  useGetJobByIdQuery
 } = apiSlice;

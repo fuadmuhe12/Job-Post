@@ -4,14 +4,44 @@ import { fetchJobs } from "@/lib/features/getJobs/jobSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import Link from "next/link";
 import { useEffect } from "react";
+import {
+  useAddBookMarkMutation,
+  useRemoveBookMarkMutation,
+  useGetBookMarksQuery,
+  useGetAllJobsQuery,
+} from "@/lib/features/api/apiSlice";
+import { useSession } from "next-auth/react";
+import Spinner from "@/components/spinner";
 
 export default function Home() {
-  const load = useAppSelector((state) => state.jobs);
+  const [
+    addBookMark,
+    {
+      isLoading: IsAddLoading,
+      error,
+      isSuccess,
+      originalArgs: addMarkOrigArgs,
+    },
+  ] = useAddBookMarkMutation();
+  const [
+    removeBookMark,
+    { isLoading: isRemoveLoading, originalArgs: remMarkOrigArgs },
+  ] = useRemoveBookMarkMutation();
+  const { data, status } = useSession();
+  const { data: bookMarkData, isLoading: isBookMarkLoading } =
+    useGetBookMarksQuery(data?.user?.accessToken || "");
+  function Addbookfunc(id: string, TOKEN: string) {
+    addBookMark({ id, TOKEN }).unwrap();
+  }
+  console.log(bookMarkData);
+  const {
+    data: jobsData,
+    isLoading: jobsIsLoading,
+    error: jobsError,
+    isError: jobIsError,
+  } = useGetAllJobsQuery();
+  const load = jobsData?.data;
 
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchJobs());
-  }, []);
   return (
     <main className="px-5 pb-7">
       <div className="flex md:flex-row flex-col justify-between p-4">
@@ -19,7 +49,9 @@ export default function Home() {
           <h1 className="font-[900] text-xl md:text-4xl text-[#25324B] pb-1">
             Opportunities
           </h1>
-          <h2 className="text-[#7C8493]">Showing {load.jobs.length} results</h2>
+          <h2 className="text-[#7C8493]">
+            Showing {load?.length ?? 0} results
+          </h2>
         </div>
         <div>
           <form>
@@ -34,24 +66,42 @@ export default function Home() {
         </div>
       </div>
       <div>
-        {load.loading ? (
-          <p className="text-center">Looding....</p>
-        ) : load.error ? (
+        {(isRemoveLoading ||
+          jobsIsLoading ||
+          isBookMarkLoading ||
+          IsAddLoading) && <Spinner />}
+        {jobIsError ? (
           <p className="text-center">
-            Error <span className="text-red-400 ">{load.error}</span>
+            Error <span className="text-red-400 ">{jobsData?.error}</span>
           </p>
         ) : (
           <div className="gap-y-8 flex flex-col">
-            {load.jobs.map((value, ind) => {
+            {load?.map((value, ind) => {
               return (
                 <Link key={ind} href={`jobdetail/${value.id}`}>
                   <JobCard
+                    isLoadingJobMark={false}
                     categories={value.categories}
                     company={value.orgName}
                     description={value.description}
                     imgUrl={`${value.logoUrl}`}
                     location={value.location[0]}
                     title={value.title}
+                    isBookmarked={
+                      bookMarkData?.data?.find(
+                        (val) => val.eventID === value.id
+                      ) !== undefined
+                    }
+                    onType={value.opType}
+                    addBookMark={() => {
+                      Addbookfunc(value.id, data?.user?.accessToken || "");
+                    }}
+                    removeBookMark={() => {
+                      removeBookMark({
+                        id: value.id,
+                        TOKEN: data?.user?.accessToken || "",
+                      }).unwrap();
+                    }}
                   />
                 </Link>
               );
