@@ -1,5 +1,5 @@
 # Job Listing site
-This is a job listing site where you see the list of jobs. You can also see the details of the job by clicking on the job.
+This is a simple job listing site where you see the list of jobs. You can also see the details of the job by clicking on the job and also you can bookmark the job and see the bookmarked jobs.
 
 ## Installation
 1. Clone the repository
