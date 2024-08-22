@@ -26,6 +26,7 @@ type Props = {
   addBookMark: () => void;
   isLoadingJobMark: boolean;
   isVerifiedUser: boolean;
+  index: number;
 };
 
 const JobCard = (props: Props) => {
@@ -51,11 +52,12 @@ const JobCard = (props: Props) => {
               <Spinner />
             ) : (
               <div
+                id={`bookmark_${props.index}`}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  if (!props.isVerifiedUser){
-                    signIn()
+                  if (!props.isVerifiedUser) {
+                    signIn();
                   }
                   props.isBookmarked
                     ? props.removeBookMark()

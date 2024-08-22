@@ -30,7 +30,7 @@ export default function Header({ children }: Props) {
             <Image src={"/akil-logo.png"} alt="Logo" width={70} height={30} />
           </div>
           <div className="flex flex-col sm:flex-row gap-x-7">
-            <Link href="/">
+            <Link href="/" id = "home_tab">
               <div
                 className={`flex flex-col items-center justify-center gap-3 px-2  ${
                   currentPath === "/" ? "border-b-2  border-[#4640DE]" : ""
@@ -46,7 +46,7 @@ export default function Header({ children }: Props) {
               </div>
             </Link>
 
-            <Link href="/markedJobs">
+            <Link href="/markedJobs" id="myjob_tab">
               <div
                 className={`flex flex-col items-center justify-center gap-3 px-2  ${
                   currentPath === "/markedJobs"
@@ -84,6 +84,7 @@ export default function Header({ children }: Props) {
             ) : (
               <div className="flex flex-col sm:flex-row gap-x-5 ">
                 <Link
+                data-id = "login_button"
                   href={"/auth/login"}
                   className="py-4 px-8 text-[#4640DE] rounded-lg  border-2 "
                 >

@@ -21,16 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={epilogue.className}>
-        <head>
-        <link rel="icon" href="/akil-logo.png" sizes="48x48" />
-        </head>
-        <div>
-          <StoreProvider>
-            <SessionProvider>
-              <Header>{children}</Header>
-            </SessionProvider>
-          </StoreProvider>
-        </div>
+        <StoreProvider>
+          <SessionProvider>
+            <Header>{children}</Header>
+          </SessionProvider>
+        </StoreProvider>
       </body>
     </html>
   );

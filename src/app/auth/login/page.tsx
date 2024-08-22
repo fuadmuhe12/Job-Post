@@ -39,7 +39,7 @@ export default function Login({}: Props) {
             email: formdata.get("email"),
             password: formdata.get("password"),
           };
-          const res = await signIn("akil-login", { ...data, redirect: false });
+          const res = await signIn("akil-login", { ...data, redirect: false , callbackUrl: "/"});
           if (res?.error) {
             setErrorMessage(res.error);
           }
@@ -52,6 +52,7 @@ export default function Login({}: Props) {
           </label>
           <input
             {...register("email", { required: true })}
+            data-id="email_input"
             name="email"
             className=" caret-gray-300 caret py-4 px-3  rounded-lg w-[408px]  outline-none border border-gray-300  focus:border "
             type="email"
@@ -68,6 +69,7 @@ export default function Login({}: Props) {
           </label>
           <input
             {...register("password", { required: true })}
+            data-id="password_input"
             name="password"
             required={true}
             className=" caret-gray-300 caret py-4 px-3  rounded-lg w-[408px]  outline-none border border-gray-300  focus:border "
@@ -75,8 +77,8 @@ export default function Login({}: Props) {
             placeholder="Enter password"
           />
         </div>
-        <div className="pt-11">
-          <Button buttonName="Continue" />
+        <div className="pt-11" id="login_submit">
+          <Button buttonName="Continue"  data-id="login_submit"/>
         </div>
       </form>
       {errorMessage && (

@@ -11,7 +11,6 @@ interface props {
   params: { jobID: string };
 }
 export default function JobDetailPage({ params }: props) {
-  const dispacher = useAppDispatch();
   const detailLoad = useAppSelector((state) => state.jobs);
   const {
     isError: jobDetailISError,

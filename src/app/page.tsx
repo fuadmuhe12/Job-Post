@@ -82,6 +82,7 @@ export default function Home() {
               return (
                 <Link key={ind} href={`jobdetail/${value.id}`}>
                   <JobCard
+                    index={ind}
                     isVerifiedUser={isVerified}
                     isLoadingJobMark={false}
                     categories={value.categories}
