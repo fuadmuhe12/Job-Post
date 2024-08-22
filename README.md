@@ -31,7 +31,7 @@ npm run dev
 
 
 ## Screenshots
-![Home](./public/screenshots/unloged.png.png)
+![Home](./public/screenshots/unloged.png)
 ![Job Details](./public/screenshots/detial.png)
 ![Login](./public/screenshots/login.png)
 ![Bookmarks](./public/screenshots/loged.png)
